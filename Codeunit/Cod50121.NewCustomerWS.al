@@ -7,15 +7,6 @@ codeunit 50121 NewCustomerWS
 
     end;
 
-    [ServiceEnabled]
-    procedure MyTestProcedure(): Text
-    var
-        myAnswer: Text[40];
-    begin
-        myAnswer := 'YES!';
-        exit(myAnswer);
-    end;
-
 
     procedure InsertCustomerWS(customerJson: Text): Boolean
     var
@@ -34,7 +25,6 @@ codeunit 50121 NewCustomerWS
 
         customerRec.Init();
         customerRec."No." := NewCustomerNo; // Automatisk genereret
-        //customerRec.Validate("No.", JsonService.GetFieldTextAsText(jsonObject, 'No'));
         customerRec.Validate("Name", JsonService.GetFieldTextAsText(jsonObject, 'Name'));
         customerRec.Validate("E-Mail", JsonService.GetFieldTextAsText(jsonObject, 'Email'));
         customerRec.Insert();
