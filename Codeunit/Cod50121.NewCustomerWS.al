@@ -22,16 +22,22 @@ codeunit 50121 NewCustomerWS
         JsonService: Codeunit JsonService;
         jsonObject: JsonObject;
         customerRec: Record Customer;
+        SalesSetup: Record "Sales & Receivables Setup";
+        NoSeriesMgt: Codeunit NoSeriesManagement;
+        NewCustomerNo: Code[20];
 
     begin
         jsonObject.ReadFrom(customerJson);
 
+        SalesSetup.Get();
+        NewCustomerNo := NoSeriesMgt.GetNextNo(SalesSetup."Customer Nos.", Today, true);
+
         customerRec.Init();
-        customerRec.Validate(Name, JsonService.GetFieldTextAsText(jsonObject, 'Name'));
+        customerRec."No." := NewCustomerNo; // Automatisk genereret
+        //customerRec.Validate("No.", JsonService.GetFieldTextAsText(jsonObject, 'No'));
+        customerRec.Validate("Name", JsonService.GetFieldTextAsText(jsonObject, 'Name'));
         customerRec.Validate("E-Mail", JsonService.GetFieldTextAsText(jsonObject, 'Email'));
         customerRec.Insert();
-
-        Message('Kunden blev oprettet med nummer: %1', customerRec."No.");
 
         exit(true);
     end;

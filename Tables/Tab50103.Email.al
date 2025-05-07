@@ -8,6 +8,7 @@ table 50103 Email
         field(1; Id; Integer)
         {
             Caption = 'Id';
+            AutoIncrement = true;
         }
         field(2; Email; Text[100])
         {
@@ -25,7 +26,7 @@ table 50103 Email
         {
             Caption = 'Date';
         }
-        field(6; Content; Text[1000])
+        field(6; EmailContent; Text[1000])
         {
             Caption = 'Content';
         }
