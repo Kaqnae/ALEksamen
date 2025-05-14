@@ -1,13 +1,5 @@
-codeunit 50121 NewCustomerWS
+codeunit 50121 CreateCustomer
 {
-    TableNo = Customer;
-
-    trigger OnRun()
-    begin
-
-    end;
-
-
     procedure InsertCustomerWS(customerJson: Text): Boolean
     var
         JsonService: Codeunit JsonService;
@@ -25,11 +17,14 @@ codeunit 50121 NewCustomerWS
 
         customerRec.Init();
         customerRec."No." := NewCustomerNo; // Automatisk genereret
+        customerRec.Validate("WooCommerceCustomerID", JsonService.GetFieldTextAsText(jsonObject, 'WooCommerceId'));
         customerRec.Validate("Name", JsonService.GetFieldTextAsText(jsonObject, 'Name'));
         customerRec.Validate("E-Mail", JsonService.GetFieldTextAsText(jsonObject, 'Email'));
+        customerRec."Gen. Bus. Posting Group" := 'INDENLANDS';
+        customerRec."Customer Posting Group" := 'INDENLANDS';
+        customerRec."Payment Terms Code" := '10 DAGE';
         customerRec.Insert();
 
         exit(true);
     end;
-
 }
