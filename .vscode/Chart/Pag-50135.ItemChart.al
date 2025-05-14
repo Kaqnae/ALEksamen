@@ -1,6 +1,6 @@
 page 50135 "Item Chart"
 {
-    Caption = 'Item Chart';
+    Caption = 'Items Sold';
     PageType = CardPart;
     ApplicationArea = All;
     UsageCategory = Administration;
@@ -39,8 +39,10 @@ page 50135 "Item Chart"
                         XValueString := Format(JsonTokenXValueString);
                         XValueString := DelChr(XValueString, '=', '"');
 
+                        /*
                         if XValueString = 'Tour Bicycle' then
                             XValueString := 'Touring Bicycle';
+                        */
 
                         itemSalesMgt.DrillDown(XValueString);
                     end;

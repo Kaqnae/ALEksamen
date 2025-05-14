@@ -65,7 +65,7 @@ codeunit 50139 "Item Sales Management"
         chartTable.Quantity := bicycleQty;
         chartTable.Insert();
 
-        chartTable.Description := 'Tour Bicycle';
+        chartTable.Description := 'Touring Bicycle';
         chartTable.Quantity := tourbikeQty;
         chartTable.Insert();
 
