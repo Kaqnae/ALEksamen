@@ -14,13 +14,13 @@ table 50103 Email
         {
             Caption = 'Email';
         }
-        field(3; Name; Text[50])
+        field(3; "Customer Name"; Text[50])
         {
             Caption = 'Name';
         }
-        field(4; Subject; Text[50])
+        field(4; WooCommerceId; Text[50])
         {
-            Caption = 'Subject';
+            Caption = 'WooCommerce Id';
         }
         field(5; "Date"; Date)
         {
@@ -30,6 +30,7 @@ table 50103 Email
         {
             Caption = 'Content';
         }
+
     }
     keys
     {
