@@ -18,7 +18,7 @@ table 50103 Email
         {
             Caption = 'Name';
         }
-        field(4; WooCommerceId; Text[50])
+        field(4; WooCommerceId; Text[10])
         {
             Caption = 'WooCommerce Id';
         }

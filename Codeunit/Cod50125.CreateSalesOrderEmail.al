@@ -18,41 +18,43 @@ codeunit 50125 CreateSalesOrderEmail
         salesOrderId: Code[20];
     begin
         emailSender := 'group1@erpeksamen.dk';
-        emailContent := 'We have recieved your order.';
-
+        emailContent := 'We have received your order.';
 
         salesHeader.Reset();
         salesHeader.SetFilter("WooCommerceOrderID", WooCommerceId);
 
-
-        if salesHeader.FindSet() then begin
-            salesHeader.Init();
+        if salesHeader.FindFirst() then begin
             salesOrderId := salesHeader."No.";
-            Message('Sales header start');
+            Message('Sales header found');
 
+
+            emailHeader.Init();
             emailHeader.WooCommerceId := salesHeader."WooCommerceOrderID";
             emailHeader.Date := salesHeader."Order Date";
             emailHeader."Customer Name" := salesHeader."Sell-to Customer Name";
             emailHeader.Email := emailSender;
             emailHeader.EmailContent := emailContent;
             emailHeader.Insert();
-        end;
 
-        salesLine.Reset();
-        salesLine.SetFilter("No.", salesOrderId);
 
-        if salesLine.FindSet() then
-            Message('Sales line start');
-        repeat
-            emailLines.Init();
-            emailLines."Item No." := salesLine."No.";
-            emailLines."Item Desc" := salesLine.Description;
-            emailLines."Item Quantity" := salesLine.Quantity;
-            emailLines."Unit Amount" := salesLine."Line Amount";
-            emailLines.Insert();
-        until salesLine.Next() = 0;
+            salesLine.Reset();
+            salesLine.SetRange("Document Type", salesHeader."Document Type");
+            salesLine.SetRange("Document No.", salesOrderId);
+
+            if salesLine.FindSet() then begin
+                repeat
+                    emailLines.Init();
+                    emailLines.Id := emailHeader.Id;
+                    emailLines."Item No." := salesLine."No.";
+                    emailLines."Item Desc" := salesLine.Description;
+                    emailLines."Item Quantity" := salesLine.Quantity;
+                    emailLines."Unit Amount" := salesLine."Line Amount";
+                    emailLines.Insert();
+                until salesLine.Next() = 0;
+            end;
+        end else
+            Message('Ingen salgsordre fundet for WooCommerce ID: %1', WooCommerceId);
     end;
-
 
 
 }
