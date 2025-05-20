@@ -3,29 +3,17 @@ pageextension 50137 "Ext Sales Order Processor" extends "Order Processor Role Ce
     layout
     {
 
+        // Inserts our custom chart part at the top of the role center
         addfirst(rolecenter)
 
         {
-
-            //"Student Line Part" is a page part
-
-            part(test; "Item Chart")
-
-            {
-
-                ApplicationArea = Basic, Suite;
-
-            }
-
-        }
-        /*
-        addfirst()
-        {
             part(ItemChartPart; "Item Chart")
+
             {
-                ApplicationArea = All;
+                ApplicationArea = Basic, Suite;
             }
+
         }
-        */
+
     }
 }

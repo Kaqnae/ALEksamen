@@ -5,6 +5,10 @@ codeunit 50139 "Item Sales Management"
         tempSalesHeader: Record "Sales Header" temporary;
         chartTable: Record "Chart Data";
 
+
+    /// <summary>
+    /// Calculates the total quantities sold for each webshop product and loads the results into the Business Chart Buffer.
+    /// </summary>
     procedure GetData(var bcf: Record "Business Chart Buffer")
     var
         salesHeader: Record "Sales Header";
@@ -16,8 +20,9 @@ codeunit 50139 "Item Sales Management"
         displayText: Text;
 
     begin
-        // Step 1: Gem alle WooCommerce ordrer i temp-tabel
+        // Step 1: Collect all WooCommerce orders into a temporary table
         salesHeader.Reset();
+        // Filter to include only orders where WooCommerceOrderID is not empty (i.e., has a value)
         salesHeader.SetFilter("WooCommerceOrderID", '<>''''');
 
         if salesHeader.FindSet() then
@@ -29,9 +34,10 @@ codeunit 50139 "Item Sales Management"
                 tempSalesHeader.Insert();
             until salesHeader.Next() = 0;
 
-        Message('Antal fundne sales orders med WooCommerce ID: %1', tempSalesHeader.Count);
+        // Optional: log count for debuggin
+        //Message('Found %1 WooCommerce orders', tempSalesHeader.Count);
 
-        // Step 2: Løb gennem hver ordre og fordel mængderne
+        // Step 2: Iterate through each temp order and sum up quantities
         if tempSalesHeader.FindSet() then
             repeat
                 salesLine.Reset();
@@ -40,6 +46,7 @@ codeunit 50139 "Item Sales Management"
 
                 if salesLine.FindSet() then
                     repeat
+                        // calculates the total quantity sold per product
                         case UpperCase(salesLine.Description) of
                             'BICYCLE':
                                 bicycleQty += salesLine.Quantity;
@@ -51,15 +58,15 @@ codeunit 50139 "Item Sales Management"
                     until salesLine.Next() = 0;
             until tempSalesHeader.Next() = 0;
 
-        // Step 3: Vis resultatet
-        Message('Bicycle: %1\TourBike: %2\Brake: %3', bicycleQty, tourbikeQty, brakeeQty);
+        // Step 3: Display results for debugging purposes
+        //Message('Totals – Bicycle: %1, Touring Bicycle: %2, Brake: %3', bicycleQty, tourbikeQty, brakeeQty);
 
 
-        // Step 4: Indsæt i tabel
-        // Ryd gamle data først - overskriver gamle data med nye
+
+        // Step 4: Clear existing chart data and insert fresh totals
         chartTable.DeleteAll();
 
-        // Indsæt nye værdier
+        // inserts each product's total into the Chart Data table
         chartTable.Init();
         chartTable.Description := 'Bicycle';
         chartTable.Quantity := bicycleQty;
@@ -75,17 +82,16 @@ codeunit 50139 "Item Sales Management"
 
 
 
-        // DISPLAY CHART:
-
+        // Step 5: Load data into the Business Chart Buffer for visualization
         index := 0;
 
         with bcf do begin
             Initialize();
-
+            // define the measure (Quantity) and chart type (Column)
             AddMeasure('Quantity', 0, "Data Type"::Integer, "Chart Type"::Column);
             SetXAxis('Item', "Data Type"::String);
 
-
+            // add one column per chartTable record
             if chartTable.FindSet() then
                 repeat
 
@@ -94,16 +100,18 @@ codeunit 50139 "Item Sales Management"
 
                     index += 1;
                 until chartTable.Next() = 0;
-
         end;
-
-
     end;
 
+
+    /// <summary>
+    /// Performs drill-down navigation to the Item Card for the given product name.
+    /// </summary>
     procedure DrillDown(ItemName: Text)
     var
         item: Record Item;
     begin
+        // locates the item by its description, then open the Item Card page
         item.SetRange("Description", ItemName);
         Page.Run(Page::"Item Card", item);
     end;

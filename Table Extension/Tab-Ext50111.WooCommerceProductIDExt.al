@@ -7,9 +7,6 @@ tableextension 50111 WooCommerceProductID_Ext extends Item     // ID 27
             Caption = 'WooCommerce Id';
             //DataClassification = ToBeClassified;        
 
-            // want a "OnValidate()"-trigger?
-            // #tal = formatet 
-
         }
     }
 }
