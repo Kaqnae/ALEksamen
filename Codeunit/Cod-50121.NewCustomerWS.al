@@ -20,9 +20,9 @@ codeunit 50121 CreateCustomer
         customerRec.Validate("WooCommerceCustomerID", JsonService.GetFieldTextAsText(jsonObject, 'WooCommerceId'));
         customerRec.Validate("Name", JsonService.GetFieldTextAsText(jsonObject, 'Name'));
         customerRec.Validate("E-Mail", JsonService.GetFieldTextAsText(jsonObject, 'Email'));
-        customerRec."Gen. Bus. Posting Group" := 'INDENLANDS';
-        customerRec."Customer Posting Group" := 'INDENLANDS';
-        customerRec."Payment Terms Code" := '10 DAGE';
+        customerRec."Gen. Bus. Posting Group" := 'DOMESTIC';
+        customerRec."Customer Posting Group" := 'DOMESTIC';
+        customerRec."Payment Terms Code" := '10 DAYS';
         customerRec.Insert();
 
         exit(true);

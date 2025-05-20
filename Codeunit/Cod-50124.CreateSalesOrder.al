@@ -62,6 +62,9 @@ codeunit 50124 CreateSalesOrder
         WooItemID: Text;
         ItemNo: Code[20];
         i: Integer;
+
+        emailDoc: Codeunit CreateSalesOrderEmail;
+
     begin
         JsonArray := JsonService.GetFieldAsArray(jsonObject, 'LineItems');
 
@@ -91,6 +94,11 @@ codeunit 50124 CreateSalesOrder
             SalesLine.Validate("Quantity", JsonService.GetFieldAsDecimal(LineObject, 'Quantity'));
             SalesLine.Insert(true);
         end;
+
+        // Creates "email"-order confirmation
+        emailDoc.CreateEmail(SalesHeader.WooCommerceOrderID);
+
+
     end;
 
     local procedure GetNextLineNo(SalesHeader: Record "Sales Header"): Integer
