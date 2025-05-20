@@ -11,6 +11,26 @@ codeunit 50122 JsonService
     end;
 
 
+    procedure GetFieldAsArray(JsonObject: JsonObject; FieldName: Text): JsonArray
+    var
+        JToken: JsonToken;
+        ReturnVal: JsonArray;
+    begin
+        if not JsonObject.Get(FieldName, JToken) then
+            Error('Field "%1" not found in JSON object.', FieldName);
+
+        if not JToken.IsArray() then
+            Error('Field "%1" is not a JSON array.', FieldName);
+
+        ReturnVal := JToken.AsArray();
+        exit(ReturnVal);
+    end;
+
+
+
+    // -------------------------------------------------------------------------------
+
+
     procedure GetFieldAsInteger(JsonObject: JsonObject; FieldName: Text): Integer;
     var
         JToken: JsonToken;
@@ -65,5 +85,7 @@ codeunit 50122 JsonService
         JsonBody.ReadFrom(Body);
         exit(JsonBody);
     end;
+
+
 
 }
