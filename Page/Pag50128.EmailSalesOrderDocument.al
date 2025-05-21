@@ -74,6 +74,7 @@ page 50128 "Email Sales Order Document "
         }
     }
 
+    // Det her er testen vi brugte for at se om der codeuniten gjorde det rigtige
     var
         testCode: Codeunit CreateSalesOrderEmail;
 
